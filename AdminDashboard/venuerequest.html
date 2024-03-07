@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        .notifications {
+            width: 700px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 25px;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .heading h2 {
+            margin: 0;
+        }
+
+        .notification i {
+            font-size: 24px;
+            color: red;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: #ccc; /* Placeholder color */
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        h3 {
+            margin: 0;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .view-details {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .confirm {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .delete {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" >
+</head>
+<body>
+   
+    <div class="notifications">
+        <div class="heading">
+            <h2  style="position: center;"> Venue Request</h2>
+            <i class="fas fa-times" style="font-size: 24px; color:red" aria-label="Close" id="close-icon"></i>
+        </div>
+            
+        <div class="notification-item">
+            <div class="avatar"></div>
+            <div class="user-details">
+                <h3>Nabin Dahal</h3>
+                <p>wants to add venue</p>
+                <div class="buttons">
+                    <button class="button view-details"  onclick="loadVenueDetails()">View Details</button>
+                    <button class="button confirm" onclick="confirmVenue()">Confirm</button>
+                    <button class="button delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function loadVenueDetails() {
+            // Redirect to the venue details page
+            window.location.href = 'venuedetails.html';
+        }
+        function redirectToVenueRequest() {
+            // Redirect to the venue request page
+            window.location.href = 'venuerequest.html';
+        }
+
+        function confirmVenue() {
+            // Logic to save the venue into the database
+            fetch('http://localhost:8080/admin/venue/addVenue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    // Provide the venue details to be saved
+                    // Example: name, phoneNumber, location, email, price, description, images
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save venue');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle successful response from the server
+                alert('Venue added successfully!');
+                closeModal(); // Close the modal and redirect to the venue request page
+            })
+            .catch(error => {
+                console.error('Error saving venue:', error);
+                alert('Failed to save venue. Please try again later.');
+            });
+        }
+        
+    document.getElementById('close-icon').addEventListener('click', function() {
+    window.history.back();
+ });
+    </script> 
+</body>
+</html>

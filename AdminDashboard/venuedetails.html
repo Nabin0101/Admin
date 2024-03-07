@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 10px;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .button {
+            padding: 8px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .ok-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .send-response-button {
+            background-color: #27ae60;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal" id="venueDetailsModal">
+        <h2>Venue Details</h2>
+        <p>Name: Venue Name</p>
+        <p>Phone Number: Venue Phone Number</p>
+        <p>Location: Venue Location</p>
+        <p>Email: Venue Email</p>
+        <p>Price Per Day: Venue Price</p>
+        <p>Images: Venue Images</p>
+        <p>Description: Venue Description</p>
+       <!-- <textarea id="responseMessage" placeholder="Type your response here"></textarea> -->
+        <button class="button ok-button" onclick="closeModal()">OK</button>
+        <!-- <button class="button send-response-button" onclick="sendResponse()">Send Response</button> -->
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('venueDetailsModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            window.location.href="venuerequest.html";
+        }
+
+        // // Function to handle sending the response
+        // function sendResponse() {
+        //     // Retrieve the response message from the textarea
+        //     var responseMessage = document.getElementById('responseMessage').value;
+        //     alert('Response sent: ' + responseMessage);
+
+        //     // Close the modal
+        //     closeModal();
+        // }
+        window.onload = openModal;
+    </script>
+</body>
+</html>

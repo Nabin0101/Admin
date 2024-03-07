@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .edit-button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Details</h1>
+
+    <div id="userTable"></div>
+
+    <script>
+        // Function to fetch user data from the server
+        async function fetchUserData() {
+            try {
+                const response = await fetch('http://localhost:8080/admin/userInfo');
+                if (!response.ok) {
+                    console.error('Error fetching user data. Status:', response.status);
+                    return [];
+                }
+
+                const contentType = response.headers.get('content-type');
+                const responseData = await response.text(); // Read the response content as text
+                console.log(response);
+                console.log('Response Content:', responseData); 
+                console.log('Response Headers:', response.headers); 
+
+                if (contentType && contentType.includes('application/json')) {
+                    const data = JSON.parse(responseData);
+                    return data;
+                } else {
+                    console.error('Unexpected response format. Content-Type:', contentType);
+                    return [];
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+                return [];
+            }
+        }
+
+        // Function to render the user table
+        function renderUserTable(userList) {
+            var table = "<table>";
+            table += "<thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Email</th><th>Phone Number</th><th>Action</th></tr></thead>";
+            table += "<tbody>";
+
+            for (var i = 0; i < userList.length; i++) {
+                table += "<tr>";
+                table += "<td>" + userList[i].id + "</td>";
+                table += "<td>" + userList[i].username + "</td>";
+                table += "<td>" + userList[i].name + "</td>";
+                table += "<td>" + userList[i].email + "</td>";
+                table += "<td>" + userList[i].phonenumber + "</td>";
+                table += "<td class='action-buttons'>";
+                table += "<button class='delete-button' onclick='deleteUser(" + userList[i].id + ")'>Delete</button>";
+                table += "</td>";
+                table += "</tr>";
+            }
+
+            table += "</tbody></table>";
+
+            document.getElementById("userTable").innerHTML = table;
+        }
+
+        // Fetch user data and render the table when the page loads
+        document.addEventListener("DOMContentLoaded", async function() {
+            const userList = await fetchUserData();
+            renderUserTable(userList);
+        });
+
+        // Function to handle deleting user
+        function deleteUser(id) {
+            
+            console.log("Deleting user with ID:", id);
+        }
+    </script>
+</body>
+</html>

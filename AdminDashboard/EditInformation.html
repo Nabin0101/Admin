@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Edit Information</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" >
+    <style>
+        .top-right {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Information</p>
+
+                                <!--  <div class="col-md-9 register-right">
+                                         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                                             <li class="nav-item">
+                                                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Employee</a>
+                                             </li>
+                                             <li class="nav-item">
+                                                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Hirer</a>
+                                             </li>
+                                         </ul>
+                                         </div> -->
+
+                                <form class="mx-1 mx-md-4" action="" method="post" id="sign-form">
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="form3Example1c">Full Name</label>
+                                            <input type="text" id="fullname" name="fullName" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="form3Example3c"> Email</label>
+                                            <input type="email" id="email" name="email" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                       
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="form3Example3d">Username</label>
+                                            <input type="text" id="username"  name="username" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="form3Example3e">Contact Number</label>
+                                            <input type="contact" id="phonenumber" name="phoneNumber" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="top-right">
+                                <i class="fas fa-times" style="font-size: 24px; color:red" aria-label="Close" id="close-icon"></i>
+                            </div>
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                <img src="https://imgs.search.brave.com/iZKuyJ5wIcc2bC5iXoeTSxRY9d9myUKs_h002RDTklM/rs:fit:500:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy81/LzVkL0thbnlhZGFh/bjEzMDYuanBn"
+                                     class="img-fluid" alt="Sample image">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<script>
+    document.getElementById('close-icon').addEventListener('click', function() {
+    window.history.back();
+ });
+
+ document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        // Retrieve username from session storage
+        const loggedInUsername = sessionStorage.getItem('loggedInUsername');
+        console.log(loggedInUsername);
+        if (loggedInUsername) {
+            // Fetch admin details based on logged-in username
+            const response = await fetch(`http://localhost:8080/getAdminDetails/${loggedInUsername}`);
+            if (response.ok) {
+                const adminData = await response.json();
+
+                // Pre-populate form fields with admin data
+                document.getElementById('fullname').value = adminData.fullName;
+                document.getElementById('email').value = adminData.email;
+                document.getElementById('username').value = adminData.username;
+                document.getElementById('phonenumber').value = adminData.phoneNumber;
+
+                // Add event listener for form submission
+                document.getElementById('sign-form').addEventListener('submit', async function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    // Get form data
+                    const formData = new FormData(this);
+
+                    try {
+                        // Send the form data to the server for update
+                        const updateResponse = await fetch(`http://localhost:8080/updateAdminInfo/${loggedInUsername}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                fullName: formData.get('fullName'),
+                                email: formData.get('email'),
+                                username: formData.get('username'),
+                                phoneNumber: formData.get('phoneNumber')
+                            })
+                        });
+
+                        if (updateResponse.ok) {
+                            console.log('Admin information updated successfully!');
+                            window.history.back();
+                            // Handle successful update, if needed
+                        } else {
+                            console.error('Failed to update admin information');
+                            // Handle failure, if needed
+                        }
+                    } catch (error) {
+                        console.error('Error updating admin information:', error);
+                        // Handle error, if needed
+                    }
+                });
+            } else {
+                console.error('Failed to fetch admin data');
+            }
+        } else {
+            console.error('No logged-in user found');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+
+
+ 
+</script>
+</html>
